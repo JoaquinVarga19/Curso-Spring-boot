@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        input, select {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px;
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        h2 {
+            margin-top: 20px;
+            text-align: center;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Calculadora Joaquin</h1>
+    <form id="calculator-form">
+        <input type="number" id="n1" placeholder="Ingresá el primer número" required step="any">
+        <input type="number" id="n2" placeholder="Ingresá el segundo número" required step="any">
+        
+        <select id="operation">
+            <option value="sumar">Sumar</option>
+            <option value="restar">Restar</option>
+            <option value="multiplicar">Multiplicar</option>
+            <option value="dividir">Dividir</option>
+        </select>
+        
+        <button type="submit">Calcular</button>
+    </form>
+    
+    <h2>Resultado: <span id="result">-</span></h2>
+</div>
+
+<script>
+    document.getElementById('calculator-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const n1 = document.getElementById('n1').value;
+        const n2 = document.getElementById('n2').value;
+        const operation = document.getElementById('operation').value;
+        
+        fetch('http://localhost:8080/calculator/calculate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                n1: parseFloat(n1),
+                n2: parseFloat(n2),
+                operation: operation
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Si el backend devuelve un objeto con una propiedad 'result', usá data.result
+            document.getElementById('result').textContent = data;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('result').textContent = 'Error en la conexión';
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -8,6 +8,8 @@ import com.Joaquin.calculadora.service.CalculadoraService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import com.Joaquin.calculadora.model.OperationRequest;  
+import org.springframework.http.ResponseEntity;
+
 
 @Controller
 @RestController
@@ -18,13 +20,9 @@ public class CalculadoraController {
     private CalculadoraService calculadoraService;
 
     @PostMapping("calculate")
-    public double calculate(@RequestBody OperationRequest request) {
-        
-        return calculadoraService.calculate(request.getN1(), request.getN2(), request.getOperation());
+    public ResponseEntity<Double> calculate(@RequestBody OperationRequest request) {
+
+        double result = calculadoraService.calculate(request.getN1(), request.getN2(), request.getOperation());
+        return ResponseEntity.ok(result);
     }
-    
-
-      
-
-
 }
